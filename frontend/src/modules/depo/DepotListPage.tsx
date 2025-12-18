@@ -110,3 +110,4 @@ export const DepotListPage: React.FC = () => {
     </div>
   );
 };
+
