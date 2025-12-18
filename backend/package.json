@@ -1,25 +1,36 @@
 {
-  "name": "backend",
+  "name": "inventari-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Sistem për Menaxhimin e Inventarit dhe Distribimit të Produkteve Sanitare",
+  "main": "dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "migrate": "tsx src/config/migrate.ts",
+    "migrate:payments": "tsx src/config/runMigration.ts",
+    "migrate:status": "tsx src/config/updatePorosiStatusEnum.ts",
+    "seed": "tsx src/config/seed.ts",
+    "test:login": "tsx src/config/testLogin.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.2.1",
-    "joi": "^17.13.3",
-    "mysql2": "^3.15.3",
-    "pdfkit": "^0.17.2",
-    "sequelize": "^6.37.7"
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.6.5",
+    "sequelize": "^6.35.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@types/bcryptjs": "^2.4.6",
+    "@types/body-parser": "^1.19.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.19.27",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
   }
 }
