@@ -20,3 +20,9 @@ export class TransaksionInventariRepository extends BaseRepository<TransaksionIn
     });
   }
 }
+
+
+
+
+
+
