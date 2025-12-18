@@ -4,8 +4,15 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  NonAttribute,
+  BelongsToGetAssociationMixin,
+  HasOneGetAssociationMixin,
 } from "sequelize";
 import { sequelize } from "../config/database";
+import type { Klient } from "./Klient";
+import type { Depo } from "./Depo";
+import type { Dergese } from "./Dergese";
+import type { Perdorues } from "./Perdorues";
 
 export enum PorosiStatus {
   DRAFT = "DRAFT",
@@ -37,6 +44,17 @@ export class Porosi extends Model<
   declare updated_at: CreationOptional<Date>;
   declare deleted_at: CreationOptional<Date | null>;
   declare created_by: number | null;
+
+  // Asociacionet (typed)
+  declare klient?: NonAttribute<Klient>;
+  declare depo?: NonAttribute<Depo>;
+  declare dergesa?: NonAttribute<Dergese>;
+  declare krijuar_nga?: NonAttribute<Perdorues>;
+
+  declare getKlient: BelongsToGetAssociationMixin<Klient>;
+  declare getDepo: BelongsToGetAssociationMixin<Depo>;
+  declare getDergesa: HasOneGetAssociationMixin<Dergese>;
+  declare getKrijuar_nga: BelongsToGetAssociationMixin<Perdorues>;
 }
 
 Porosi.init(
@@ -130,3 +148,4 @@ Porosi.init(
     deletedAt: "deleted_at",
   }
 );
+

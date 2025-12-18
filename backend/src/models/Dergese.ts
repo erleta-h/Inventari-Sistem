@@ -4,8 +4,13 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  NonAttribute,
+  BelongsToGetAssociationMixin,
 } from "sequelize";
 import { sequelize } from "../config/database";
+import type { Porosi } from "./Porosi";
+import type { Perdorues } from "./Perdorues";
+import type { MjetTransportues } from "./MjetTransportues";
 
 export enum DergeseStatus {
   PLANNED = "PLANNED",
@@ -31,6 +36,15 @@ export class Dergese extends Model<
   declare last_known_lng: number | null;
   declare created_at: CreationOptional<Date>;
   declare updated_at: CreationOptional<Date>;
+
+  // Asociacionet (typed) - krijohen kur përdoret `include` ose mixins
+  declare porosi?: NonAttribute<Porosi>;
+  declare shofer?: NonAttribute<Perdorues>;
+  declare mjet?: NonAttribute<MjetTransportues>;
+
+  declare getPorosi: BelongsToGetAssociationMixin<Porosi>;
+  declare getShofer: BelongsToGetAssociationMixin<Perdorues>;
+  declare getMjet: BelongsToGetAssociationMixin<MjetTransportues>;
 }
 
 Dergese.init(
