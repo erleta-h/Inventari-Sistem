@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config();
+// Sigurohu që .env file lexohet nga root i backend folder-it
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 export const env = {
   db: {
