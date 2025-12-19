@@ -29,6 +29,12 @@ export class AuthController {
       });
     } catch (error: any) {
       console.error("Login error:", error);
+      console.error("Error stack:", error.stack);
+      console.error("Error details:", {
+        message: error.message,
+        name: error.name,
+        code: error.code,
+      });
       
       // Nëse është gabim i autentifikimit, kthe 401
       if (error.message && (
@@ -42,12 +48,15 @@ export class AuthController {
       }
 
       // Për gabime të tjera, kthe 500 me detaje në development
+      const isDevelopment = process.env.NODE_ENV === "development" || !process.env.NODE_ENV;
       res.status(500).json({
         status: "error",
         message: error.message || "Gabim në autentifikim",
-        ...(process.env.NODE_ENV === "development" && { 
+        ...(isDevelopment && { 
           stack: error.stack,
-          details: error.toString()
+          details: error.toString(),
+          errorName: error.name,
+          errorCode: error.code,
         }),
       });
     }
