@@ -11,6 +11,7 @@
     "migrate:payments": "tsx src/config/runMigration.ts",
     "migrate:status": "tsx src/config/updatePorosiStatusEnum.ts",
     "seed": "tsx src/config/seed.ts",
+    "ci:sync": "tsx src/config/ciSync.ts",
     "test:login": "tsx src/config/testLogin.ts"
   },
   "dependencies": {
