@@ -1,0 +1,85 @@
+name: Inventari CI Tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: inventari_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Configure environment
+        working-directory: backend
+        run: |
+          cp env.example .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_USER=root" >> .env
+          echo "DB_PASSWORD=root" >> .env
+          echo "DB_NAME=inventari_db" >> .env
+          echo "JWT_SECRET=ci-test-secret" >> .env
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot && break
+            sleep 2
+          done
+
+      - name: Sync database schema
+        working-directory: backend
+        run: npm run ci:sync
+
+      - name: Seed database
+        working-directory: backend
+        run: npm run seed
+
+      - name: Start API server
+        working-directory: backend
+        run: |
+          npm run dev &
+          sleep 8
+
+      - name: Run API tests
+        run: |
+          mkdir -p test-reports
+          API_URL=http://localhost:3000 node api-tests.js 2>&1 | tee test-reports/ci-api-console.log
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-api-test-reports
+          path: |
+            test-reports/ci-api-report.json
+            test-reports/ci-api-report.txt
+            test-reports/ci-api-report.html
+            test-reports/ci-api-console.log
+          retention-days: 14

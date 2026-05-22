@@ -1,0 +1,13 @@
+{
+  "name": "inventari-selenium-tests",
+  "private": true,
+  "scripts": {
+    "test:ui": "node selenium-8tests.js",
+    "test:ui:suite": "node selenium-suite.test.js",
+    "test:ui:quick": "node selenium-login.test.js",
+    "test:api": "node api-tests.js"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.44.0"
+  }
+}
