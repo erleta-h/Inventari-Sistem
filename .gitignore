@@ -25,6 +25,11 @@ pnpm-debug.log*
 *.seed
 *.tgz
 
+# Test reports (generated)
+test-reports/*.png
+test-reports/*.json
+test-reports/*.html
+
 # OS / IDE
 .DS_Store
 Thumbs.db
